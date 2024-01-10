@@ -1,6 +1,7 @@
 package jar.service;
 
 import jar.beans.Transaction;
+import jar.dto.TransactionCurrencyConversionResponseDto;
 import jar.dto.TransactionRequestDto;
 
 import java.util.List;
@@ -15,5 +16,5 @@ public interface TransactionService {
 
     List<Transaction> getTransactionsByDate(String date);
 
-    List<Transaction> getAllTransactionsInCurrency(String currency);
+    List<TransactionCurrencyConversionResponseDto> getAllTransactionsConvertedInTargetCurrency(String targetCurrency);
 }

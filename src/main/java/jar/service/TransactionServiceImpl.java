@@ -2,6 +2,7 @@ package jar.service;
 
 import jar.beans.Transaction;
 import jar.dto.GlobalCurrencyConverterDto;
+import jar.dto.TransactionCurrencyConversionResponseDto;
 import jar.dto.TransactionRequestDto;
 import jar.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,14 +46,13 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsInCurrency(String currency) {
+    public List<TransactionCurrencyConversionResponseDto> getAllTransactionsConvertedInTargetCurrency(String currency) {
         List<Transaction> transactions = transactionRepository.findAll();
-        return giveAllTransactionsInCurrency(transactions, currency);
+        List<TransactionCurrencyConversionResponseDto> TransactionCurrencyConversionResponseDto = convertToCurrencyConversionResponseDtoList(transactions);
+        return giveAllTransactionsInCurrency(TransactionCurrencyConversionResponseDto, currency);
     }
 
-    private List<Transaction> giveAllTransactionsInCurrency(List<Transaction> transactions, String currency) {
-        List<Transaction> transactionsWithDifferentCurrency =
-                transactions.stream().filter(transaction -> !transaction.getCurrency().equalsIgnoreCase(currency)).toList();
+    private List<TransactionCurrencyConversionResponseDto> giveAllTransactionsInCurrency(List<TransactionCurrencyConversionResponseDto> transactions, String currency) {
         String targetUrl = "https://api.fxratesapi.com/latest";
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -59,16 +60,38 @@ public class TransactionServiceImpl implements TransactionService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<GlobalCurrencyConverterDto> responseEntity = restTemplate
                 .exchange(targetUrl, HttpMethod.GET, entity, GlobalCurrencyConverterDto.class);
-        transactionsWithDifferentCurrency.forEach(
+        transactions.forEach(
                 transaction -> {
-                    double amountInUSD = transaction.getAmount()/responseEntity.getBody().getRates().get(transaction.getCurrency());
-                    double amountInRequiredCurrency = amountInUSD*responseEntity.getBody().getRates().get(currency);
-                    transaction.setAmount(amountInRequiredCurrency);
-                    transaction.setCurrency(currency);
+                    if(transaction.getCurrency().equalsIgnoreCase(currency)){
+                        transaction.setConvertedAmount(transaction.getAmount());
+                    }else {
+                        double amountInUSD = transaction.getAmount() / responseEntity.getBody().getRates().get(transaction.getCurrency());
+                        double amountInRequiredCurrency = amountInUSD * responseEntity.getBody().getRates().get(currency);
+                        transaction.setConvertedAmount(amountInRequiredCurrency);
+                    }
+                    transaction.setTargetCurrency(currency);
                 }
         );
         return transactions;
     }
+
+    public List<TransactionCurrencyConversionResponseDto> convertToCurrencyConversionResponseDtoList(List<Transaction> transactions) {
+        return transactions.stream()
+                .map(this::convertToCurrencyConversionResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    private TransactionCurrencyConversionResponseDto convertToCurrencyConversionResponseDto(Transaction transaction) {
+        TransactionCurrencyConversionResponseDto responseDto = new TransactionCurrencyConversionResponseDto();
+        responseDto.setTransactionId(transaction.getTransactionId());
+        responseDto.setAmount(transaction.getAmount());
+        responseDto.setCurrency(transaction.getCurrency());
+        responseDto.setAccountingDate(transaction.getAccountingDate());
+
+        return responseDto;
+    }
+
+
 
 
 }

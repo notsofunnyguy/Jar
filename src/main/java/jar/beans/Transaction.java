@@ -1,7 +1,11 @@
 package jar.beans;
 
 import jakarta.persistence.*;
+import jar.dto.TransactionCurrencyConversionResponseDto;
 import lombok.Data;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity

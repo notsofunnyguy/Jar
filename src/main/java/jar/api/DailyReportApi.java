@@ -11,7 +11,7 @@ import jar.service.DailyReportService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/dailyReport")
+@RequestMapping("/daily-report")
 public class DailyReportApi {
 
     private final DailyReportService dailyReportService;
