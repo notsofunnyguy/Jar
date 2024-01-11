@@ -1,16 +1,14 @@
 package jar.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Money {
+    @NonNull
     private double amount;
+    @NotBlank
     private String currency;
 }

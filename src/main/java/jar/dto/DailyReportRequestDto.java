@@ -1,12 +1,10 @@
 package jar.dto;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class DailyReportRequestDto {
+    @NotBlank
     private String date;
 }

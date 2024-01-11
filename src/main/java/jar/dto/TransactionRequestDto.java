@@ -1,9 +1,11 @@
 package jar.dto;
 
-import jar.beans.Transaction;
+import jar.models.Transaction;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 public class TransactionRequestDto extends Money{
 
     public Transaction getTransaction() {

@@ -1,6 +1,6 @@
 package jar.service;
 
-import jar.beans.Transaction;
+import jar.models.Transaction;
 import jar.dto.TransactionCurrencyConversionResponseDto;
 import jar.dto.TransactionRequestDto;
 

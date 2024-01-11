@@ -1,6 +1,6 @@
 package jar.api;
 
-import jar.beans.Transaction;
+import jar.models.Transaction;
 import jar.dto.TransactionCurrencyConversionResponseDto;
 import jar.dto.TransactionRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import jar.service.TransactionService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/transactions")

@@ -1,6 +1,6 @@
 package jar.jarAssignment.Jar.DailyReportTets;
 
-import jar.beans.Transaction;
+import jar.models.Transaction;
 import jar.dto.DailyReportRequestDto;
 import jar.dto.DailyReportResponseDto;
 import jar.dto.DailyReportSummary;

@@ -1,6 +1,6 @@
 package jar.dto;
 
-import jar.beans.Transaction;
+import jar.models.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

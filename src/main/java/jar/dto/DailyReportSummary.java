@@ -13,8 +13,4 @@ public class DailyReportSummary {
     private long transactionsCount;
     private double creditedAmount;
     private double debitedAmount;
-
-    public static DailyReportSummary getDailyReportSummary(){
-        return new DailyReportSummary();
-    }
 }

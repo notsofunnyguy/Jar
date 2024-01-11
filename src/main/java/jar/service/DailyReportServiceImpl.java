@@ -1,6 +1,6 @@
 package jar.service;
 
-import jar.beans.Transaction;
+import jar.models.Transaction;
 import jar.dto.DailyReportRequestDto;
 import jar.dto.DailyReportResponseDto;
 import jar.dto.DailyReportSummary;
@@ -24,7 +24,7 @@ public class DailyReportServiceImpl implements DailyReportService {
 
         transactions.forEach(
                 transaction -> {
-                    dailyReportSummaryPerCurrency.computeIfAbsent(transaction.getCurrency(), v -> DailyReportSummary.getDailyReportSummary());
+                    dailyReportSummaryPerCurrency.computeIfAbsent(transaction.getCurrency(), v -> new DailyReportSummary());
                     getUpdatedDailyReportSummaryAndTransaction(dailyReportSummaryPerCurrency.get(transaction.getCurrency()), transaction);
                 }
         );
